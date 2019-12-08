@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 import logging
 
-from config import setup
-from file_service import *
-from hcl_helper import *
-from tf_service import *
+import file.service as fs
+import hcl.service as hcl
+import terraform.service as tf
+
+import config as cfg
 
 
 def main():
@@ -14,26 +15,26 @@ def main():
     Run the main logic of the app
     """
 
-    args, config = setup()
+    args, config = cfg.setup()
     folder = (args.folder or './modules/aks')
     function = (args.function or 'reference')
 
-    for file in findFiles(folder):
-        json = convertTfFileToJson(file)
+    for file in fs.findFiles(folder):
+        json = hcl.convertTfFileToJson(file)
         controller(function, json)
 
 
 def controller(function, json):
     if 'reference' == function:
-        variables = getVariableReference(json)
-        output(variables)
+        variables = tf.getVariableReference(json)
+        tf.output(variables)
 
     elif 'definition' == function:
-        variableDefinitions = getVariableDefinition(json)
-        output(variableDefinitions)
+        variableDefinitions = tf.getVariableDefinition(json)
+        tf.output(variableDefinitions)
 
     elif 'compare' == function:
-        variableComparison = compareVariable(json)
+        variableComparison = tf.compareVariable(json)
         print("Compare", variableComparison, sep='\t')
 
 
