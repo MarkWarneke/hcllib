@@ -25,4 +25,4 @@ hcltojson
 
 ## Contirbutions
 
-- [MarkWarnkee](www.twitter.com/MarkWarneke)
+- [MarkWarneke](https://www.twitter.com/MarkWarneke)
